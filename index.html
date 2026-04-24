@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoaFlow - Controle Inteligente de Doações</title>
+    
+    <!-- Google Fonts e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Nosso arquivo CSS externo -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><i class="fa-solid fa-box-open"></i> DoaFlow</div>
+        <div class="user-profile">
+            <span>ONG Mãos Amigas</span>
+            <i class="fa-solid fa-circle-user"></i>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Topo: Estatísticas -->
+        <div class="stats-grid">
+            <div class="card stat-card">
+                <div class="stat-icon icon-blue"><i class="fa-solid fa-boxes-stacked"></i></div>
+                <div class="stat-info">
+                    <h3>Total de Itens</h3>
+                    <p id="stat-total">0</p>
+                </div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-icon icon-green"><i class="fa-solid fa-bowl-food"></i></div>
+                <div class="stat-info">
+                    <h3>Alimentos</h3>
+                    <p id="stat-food">0</p>
+                </div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-icon icon-purple"><i class="fa-solid fa-shirt"></i></div>
+                <div class="stat-info">
+                    <h3>Roupas</h3>
+                    <p id="stat-clothes">0</p>
+                </div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-icon icon-orange"><i class="fa-solid fa-soap"></i></div>
+                <div class="stat-info">
+                    <h3>Higiene</h3>
+                    <p id="stat-hygiene">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Meio: Gráfico e Alertas -->
+        <div class="dashboard-middle">
+            <div class="card">
+                <h3 class="section-title"><i class="fa-solid fa-chart-pie"></i> Distribuição do Estoque</h3>
+                <div class="chart-container">
+                    <canvas id="inventoryChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="section-title"><i class="fa-solid fa-bell"></i> Alertas e Urgências</h3>
+                <div class="alerts-wrapper" id="alerts-container"></div>
+            </div>
+        </div>
+
+        <!-- Tabela de Estoque -->
+        <div class="card">
+            <div class="controls">
+                <h3 class="section-title" style="margin:0;"><i class="fa-solid fa-list-ul"></i> Inventário Atual</h3>
+                <button onclick="openModal()"><i class="fa-solid fa-plus"></i> Registrar Doação</button>
+            </div>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Categoria</th>
+                            <th>Quantidade</th>
+                            <th>Validade / Detalhe</th>
+                            <th>Status</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar -->
+    <div class="modal-overlay" id="addModal">
+        <div class="modal">
+            <h2><i class="fa-solid fa-hand-holding-heart"></i> Nova Doação</h2>
+            <form id="donationForm">
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="itemCategory" onchange="toggleFields()">
+                        <option value="Alimento">Alimento (Perecível/Não Perecível)</option>
+                        <option value="Roupa">Roupa / Calçado</option>
+                        <option value="Higiene">Higiene / Limpeza</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nome do Produto</label>
+                    <input type="text" id="itemName" placeholder="Ex: Arroz 1kg, Casaco..." required>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade recebida</label>
+                    <input type="number" id="itemQty" min="1" value="1" required>
+                </div>
+                <div class="form-group" id="fieldValidade">
+                    <label>Data de Validade <span style="color:var(--danger)">*</span></label>
+                    <input type="date" id="itemExpiry">
+                </div>
+                <div class="form-group" id="fieldTamanho" style="display: none;">
+                    <label>Tamanho / Descrição</label>
+                    <input type="text" id="itemSize" placeholder="Ex: Tamanho M, Infantil...">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-outline" onclick="closeModal()">Cancelar</button>
+                    <button type="submit"><i class="fa-solid fa-check"></i> Salvar Estoque</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Nossos arquivos JS externos -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
